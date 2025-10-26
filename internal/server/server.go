@@ -10,6 +10,8 @@ import (
 	_ "github.com/joho/godotenv/autoload"
 
 	"flight-booking/internal/database"
+	"flight-booking/internal/service"
+	"flight-booking/internal/service/providers"
 )
 
 type Server struct {
@@ -26,10 +28,13 @@ func NewServer() *http.Server {
 		db: database.New(),
 	}
 
+	svc := service.NewMultipleSearchService()
+	svc.AddProviderService(providers.NewStubGDS())
+
 	// Declare Server config
 	server := &http.Server{
 		Addr:         fmt.Sprintf(":%d", NewServer.port),
-		Handler:      NewServer.RegisterRoutes(),
+		Handler:      NewServer.RegisterRoutes(svc),
 		IdleTimeout:  time.Minute,
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 30 * time.Second,

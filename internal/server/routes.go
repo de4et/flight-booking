@@ -3,11 +3,14 @@ package server
 import (
 	"net/http"
 
+	"flight-booking/internal/server/handlers"
+	"flight-booking/internal/service"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
-func (s *Server) RegisterRoutes() http.Handler {
+func (s *Server) RegisterRoutes(searchService *service.MultipleSearchService) http.Handler {
 	r := gin.Default()
 
 	r.Use(cors.New(cors.Config{
@@ -16,6 +19,9 @@ func (s *Server) RegisterRoutes() http.Handler {
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true, // Enable cookies/auth
 	}))
+
+	apiGroup := r.Group("/api/v1")
+	apiGroup.GET("/search-result", handlers.NewSearchResultHandler(searchService).Handle)
 
 	r.GET("/", s.HelloWorldHandler)
 
