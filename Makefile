@@ -9,6 +9,9 @@ build:
 	
 	@go build -o main cmd/api/main.go
 
+setup:
+	cp ./.env.example .env
+
 # Run the application
 run:
 	@go run cmd/api/main.go
