@@ -2,16 +2,19 @@ package server
 
 import (
 	"fmt"
+	"log/slog"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
 
-	_ "github.com/joho/godotenv/autoload"
-
+	"flight-booking/internal/adapters/protobuf"
+	"flight-booking/internal/adapters/redis"
 	"flight-booking/internal/database"
 	"flight-booking/internal/service"
 	"flight-booking/internal/service/providers"
+
+	_ "github.com/joho/godotenv/autoload"
 )
 
 type Server struct {
@@ -28,8 +31,17 @@ func NewServer() *http.Server {
 		db: database.New(),
 	}
 
-	svc := service.NewMultipleSearchService()
-	svc.AddProviderService(providers.NewStubGDS())
+	redisAddr := fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT"))
+
+	slog.Debug("Connecting to redis", "addr", redisAddr)
+	c, err := redis.NewRedisSROCache(redisAddr, os.Getenv("REDIS_PASSWORD"), protobuf.NewTripsSerializer())
+	if err != nil {
+		panic("couldn't start redis")
+	}
+
+	svc := service.NewMultipleSearchService(c)
+	svc.AddProviderService(providers.NewStubGDS(5))
+	svc.AddProviderService(providers.NewStubGDS(1))
 
 	// Declare Server config
 	server := &http.Server{

@@ -1,12 +1,17 @@
 package handlers
 
 import (
-	"fmt"
+	"errors"
+	"log/slog"
+	"net/http"
 
+	"flight-booking/internal/logger"
 	"flight-booking/internal/service"
 
 	"github.com/gin-gonic/gin"
 )
+
+var ErrNoToken = errors.New("no token provided")
 
 const tokenName = "token"
 
@@ -23,13 +28,16 @@ func NewSearchResultHandler(searchService *service.MultipleSearchService) *Searc
 func (handler *SearchResultHandler) Handle(c *gin.Context) {
 	token := c.Query(tokenName)
 	if len(token) == 0 {
+		c.AbortWithError(http.StatusBadRequest, ErrNoToken)
 		return
 	}
 
-	ts, err := handler.searchService.SearchByToken(c, token)
+	ctx := logger.WithContext(c, "token", token)
+	ts, err := handler.searchService.SearchByToken(ctx, token)
 	if err != nil {
 		return
 	}
 
-	fmt.Println(ts)
+	ctx = logger.WithContext(ctx, "trips", ts)
+	slog.InfoContext(ctx, "Successfully recieved trips")
 }

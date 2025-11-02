@@ -1,0 +1,31 @@
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - config:
+            - type: filestream
+              id: container-${data.docker.container.id}
+              prospector.scanner.symlinks: true
+              close.on_state_change.removed: false
+              parsers:
+                - container: ~
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              exclude_lines: ["^\\s+[\\-`('.|_]"]
+
+processors:
+- add_docker_metadata:
+    host: "unix:///var/run/docker.sock"
+
+- drop_fields:
+    fields:
+      - "/container\\.labels\\..*_.*/"
+      - "/agent.*/"
+      - "stream"
+    ignore_missing: true
+
+output.logstash:
+  hosts: ["logstash:5044"]
+
+setup.kibana:
+  host: "kibana:5601"

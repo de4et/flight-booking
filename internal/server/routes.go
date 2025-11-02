@@ -3,18 +3,24 @@ package server
 import (
 	"net/http"
 
-	"flight-booking/internal/server/handlers"
-	"flight-booking/internal/service"
-
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+
+	"flight-booking/internal/server/handlers"
+	"flight-booking/internal/server/middleware"
+	"flight-booking/internal/service"
 )
 
 func (s *Server) RegisterRoutes(searchService *service.MultipleSearchService) http.Handler {
-	r := gin.Default()
+	r := gin.New()
 
+	r.Use(gin.Recovery())
+	r.Use(middleware.LogHandler())
+	r.Use(middleware.MetricsHandler())
+	r.Use(middleware.ErrorHandler())
 	r.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"http://localhost:5173"}, // Add your frontend URL
+		AllowAllOrigins: true,
+		// AllowOrigins:     []string{"http://localhost:5173"}, // Add your frontend URL
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"},
 		AllowHeaders:     []string{"Accept", "Authorization", "Content-Type"},
 		AllowCredentials: true, // Enable cookies/auth

@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package trips;
+
+import "google/protobuf/timestamp.proto";
+import "internal/adapters/protobuf/sro/sro.proto";
+
+option go_package = "github.com/de4et/flight-booking/internal/adapters/protobuf/trips;trips";
+
+message Trip {
+  string rid = 1;
+  string tid = 2;
+  string sid = 3;
+  string cache_id = 4;
+  Provider provider = 5;
+  repeated TripSegment segments = 6;
+  TripPrices prices = 7;
+  FareRules rules = 8;
+  TripMetadata metadata = 9;
+  TripBooking booking = 10;
+  sro.SRO sro = 11;
+}
+
+message TripSegment {
+  string flight_number = 1;
+  string carrier = 2;
+  string operating_carrier = 3;
+  FlightPoint departure = 4;
+  FlightPoint arrival = 5;
+  int32 duration_minutes = 6;
+  string cabin_class = 7;
+  string fare_code = 8;
+  BaggageInfo baggage = 9;
+  string meal = 10;
+  string aircraft = 11;
+  int32 stop_time_minutes = 12;
+  int32 direction = 13;
+}
+
+message FlightPoint {
+  string airport = 1;
+  string terminal = 2;
+  google.protobuf.Timestamp time = 3;
+}
+
+message BaggageInfo {
+  int32 pieces = 1;
+  int32 weight = 2;
+  string type = 3;
+}
+
+message TripPrices {
+  double price = 1;
+  double search_price = 2;
+  double price_fare = 3;
+  double provider_service_fee = 4;
+  double provider_taxes_amount = 5;
+  string provider_currency = 6;
+  double min_allowable_price = 7;
+  double tkp_tax = 8;
+  double spec_tax = 9;
+  PricerInfo pricer_info = 10;
+  double bags_price = 11;
+  map<string, double> passengers_price_details = 12;
+}
+
+message PricerInfo {
+  double markup = 1;
+  double commission = 2;
+  double partner_affiliate_fee = 3;
+  double cashback_rate = 4;
+}
+
+message Provider {
+  string name = 1;
+  string gds = 2;
+  string gds_server = 3;
+  string office_id = 4;
+  string validating_carrier = 5;
+}
+
+message FareRules {
+  bool is_refund = 1;
+  bool is_exchangeable = 2;
+  double refund_amount = 3;
+  double exchange_fee = 4;
+  double penalty = 5;
+}
+
+message TripMetadata {
+  string flight_type = 1;
+  bool is_vtrip = 2;
+  string vtrip_combo_id = 3;
+  int32 route_duration = 4;
+  int32 num_transfers = 5;
+  bool has_baggage = 6;
+  bool has_luggage = 7;
+  FareFamily fare_family = 8;
+  string tariff_type = 9;
+  int32 age_threshold = 10;
+  bool is_virtual_interline = 11;
+}
+
+message FareFamily {
+  string type = 1;
+  string name = 2;
+  string marketing_name = 3;
+  bool has_fare_family = 4;
+}
+
+message TripBooking {
+  google.protobuf.Timestamp expires_at = 1;
+  google.protobuf.Timestamp ticketing_time_limit = 2;
+  google.protobuf.Timestamp provider_recommendation_limit = 3;
+  google.protobuf.Timestamp provider_recommendation_created = 4;
+  int32 count_of_blanks = 5;
+  bool booking_with_partial_data_allowed = 6;
+  bool booking_actualization_allowed = 7;
+}
+
+message Trips {
+  repeated Trip trips = 1;
+}

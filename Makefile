@@ -14,10 +14,11 @@ run:
 	@go run cmd/api/main.go
 # Create DB container
 docker-run:
-	@if docker compose up --build 2>/dev/null; then \
-		: ; \
+	@if docker compose version >/dev/null 2>&1; then \
+		echo "Using Docker Compose v2"; \
+		docker compose up --build; \
 	else \
-		echo "Falling back to Docker Compose V1"; \
+		echo "Using Docker Compose v1"; \
 		docker-compose up --build; \
 	fi
 

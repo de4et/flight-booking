@@ -1,12 +1,11 @@
 package sro_test
 
 import (
+	"flight-booking/internal/model/sro"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
-
-	"flight-booking/internal/model/sro"
 )
 
 func TestFromToken(t *testing.T) {

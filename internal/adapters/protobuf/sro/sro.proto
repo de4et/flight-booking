@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+package sro;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/de4et/flight-booking/internal/adapters/protobuf/sro;sro";
+
+message SRO {
+  repeated Segment segments = 1;
+  Passengers passengers = 2;
+  string class = 3;
+  string type = 4;
+  ChannelToken channel_token = 5;
+  Filters filters = 6;
+  Metadata metadata = 7;
+}
+
+message Segment {
+  string from = 1;
+  string to = 2;
+  google.protobuf.Timestamp date = 3;
+}
+
+message Passengers {
+  int32 adt = 1;
+  int32 chd = 2;
+  int32 inf = 3;
+  int32 src = 4;
+  int32 yth = 5;
+  bool ins = 6;
+}
+
+message ChannelToken {
+  string partner_code = 1;
+  string source_code = 2;
+}
+
+message Filters {
+  bool is_direct_only = 1;
+  int32 max_stops = 2;
+  bool with_baggage_only = 3;
+  repeated string carriers = 4;
+  string carriers_type = 5;
+  repeated string gds_list = 6;
+  string gds_list_type = 7;
+}
+
+message Metadata {
+  bool is_test = 1;
+  string currency = 2;
+  string language = 3;
+  int32 timeout = 4;
+}
