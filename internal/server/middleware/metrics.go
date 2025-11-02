@@ -1,9 +1,10 @@
 package middleware
 
 import (
-	"flight-booking/internal/metrics"
 	"fmt"
 	"time"
+
+	"github.com/de4et/flight-booking/internal/metrics"
 
 	"github.com/gin-gonic/gin"
 )

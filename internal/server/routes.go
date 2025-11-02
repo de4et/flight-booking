@@ -6,9 +6,9 @@ import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 
-	"flight-booking/internal/server/handlers"
-	"flight-booking/internal/server/middleware"
-	"flight-booking/internal/service"
+	"github.com/de4et/flight-booking/internal/server/handlers"
+	"github.com/de4et/flight-booking/internal/server/middleware"
+	"github.com/de4et/flight-booking/internal/service"
 )
 
 func (s *Server) RegisterRoutes(searchService *service.MultipleSearchService) http.Handler {

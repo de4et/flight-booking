@@ -1,4 +1,4 @@
-module flight-booking
+module github.com/de4et/flight-booking
 
 go 1.24.0
 

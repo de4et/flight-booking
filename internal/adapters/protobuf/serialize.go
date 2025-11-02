@@ -5,8 +5,8 @@ import (
 
 	"google.golang.org/protobuf/proto"
 
-	"flight-booking/internal/adapters/protobuf/trips"
-	"flight-booking/internal/model/trip"
+	"github.com/de4et/flight-booking/internal/adapters/protobuf/trips"
+	"github.com/de4et/flight-booking/internal/model/trip"
 )
 
 type TripsSerializer struct{}

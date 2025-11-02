@@ -15,7 +15,7 @@ import (
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	timestamppb "google.golang.org/protobuf/types/known/timestamppb"
 
-	sro "flight-booking/internal/adapters/protobuf/sro"
+	sro "github.com/de4et/flight-booking/internal/adapters/protobuf/sro"
 )
 
 const (

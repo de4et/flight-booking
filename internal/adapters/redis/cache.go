@@ -6,8 +6,8 @@ import (
 	"errors"
 	"time"
 
-	"flight-booking/internal/model/trip"
-	"flight-booking/internal/service"
+	"github.com/de4et/flight-booking/internal/model/trip"
+	"github.com/de4et/flight-booking/internal/service"
 
 	"github.com/redis/go-redis/v9"
 )

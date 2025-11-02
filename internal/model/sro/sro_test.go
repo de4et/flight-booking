@@ -1,9 +1,10 @@
 package sro_test
 
 import (
-	"flight-booking/internal/model/sro"
 	"testing"
 	"time"
+
+	"github.com/de4et/flight-booking/internal/model/sro"
 
 	"github.com/google/go-cmp/cmp"
 )

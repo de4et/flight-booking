@@ -5,8 +5,8 @@ import (
 	"log/slog"
 	"net/http"
 
-	"flight-booking/internal/logger"
-	"flight-booking/internal/service"
+	"github.com/de4et/flight-booking/internal/logger"
+	"github.com/de4et/flight-booking/internal/service"
 
 	"github.com/gin-gonic/gin"
 )

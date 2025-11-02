@@ -8,11 +8,11 @@ import (
 	"strconv"
 	"time"
 
-	"flight-booking/internal/adapters/protobuf"
-	"flight-booking/internal/adapters/redis"
-	"flight-booking/internal/database"
-	"flight-booking/internal/service"
-	"flight-booking/internal/service/providers"
+	"github.com/de4et/flight-booking/internal/adapters/protobuf"
+	"github.com/de4et/flight-booking/internal/adapters/redis"
+	"github.com/de4et/flight-booking/internal/database"
+	"github.com/de4et/flight-booking/internal/service"
+	"github.com/de4et/flight-booking/internal/service/providers"
 
 	_ "github.com/joho/godotenv/autoload"
 )

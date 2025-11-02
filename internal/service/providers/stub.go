@@ -2,9 +2,10 @@ package providers
 
 import (
 	"context"
-	"flight-booking/internal/model/sro"
-	"flight-booking/internal/model/trip"
 	"time"
+
+	"github.com/de4et/flight-booking/internal/model/sro"
+	"github.com/de4et/flight-booking/internal/model/trip"
 )
 
 type StubGDS struct {

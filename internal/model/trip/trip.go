@@ -1,8 +1,9 @@
 package trip
 
 import (
-	"flight-booking/internal/model/sro"
 	"time"
+
+	"github.com/de4et/flight-booking/internal/model/sro"
 )
 
 type Trip struct {

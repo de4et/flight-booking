@@ -7,9 +7,9 @@ import (
 	"log/slog"
 	"sync"
 
-	"flight-booking/internal/logger"
-	"flight-booking/internal/model/sro"
-	"flight-booking/internal/model/trip"
+	"github.com/de4et/flight-booking/internal/logger"
+	"github.com/de4et/flight-booking/internal/model/sro"
+	"github.com/de4et/flight-booking/internal/model/trip"
 )
 
 var (

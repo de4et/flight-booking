@@ -11,9 +11,9 @@ import (
 	"syscall"
 	"time"
 
-	"flight-booking/internal/logger"
-	"flight-booking/internal/metrics"
-	"flight-booking/internal/server"
+	"github.com/de4et/flight-booking/internal/logger"
+	"github.com/de4et/flight-booking/internal/metrics"
+	"github.com/de4et/flight-booking/internal/server"
 )
 
 func gracefulShutdown(apiServer *http.Server, done chan bool) {

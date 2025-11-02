@@ -3,7 +3,7 @@ package sro
 import (
 	"time"
 
-	"flight-booking/internal/model/sro"
+	"github.com/de4et/flight-booking/internal/model/sro"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

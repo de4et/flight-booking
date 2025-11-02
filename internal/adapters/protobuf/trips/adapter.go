@@ -3,10 +3,10 @@ package trips
 import (
 	"time"
 
-	sroAdapter "flight-booking/internal/adapters/protobuf/sro"
+	sroAdapter "github.com/de4et/flight-booking/internal/adapters/protobuf/sro"
 
-	"flight-booking/internal/model/sro"
-	"flight-booking/internal/model/trip"
+	"github.com/de4et/flight-booking/internal/model/sro"
+	"github.com/de4et/flight-booking/internal/model/trip"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
