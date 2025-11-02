@@ -34,3 +34,4 @@ main
 .DS_Store
 
 *.vim
+*.log
