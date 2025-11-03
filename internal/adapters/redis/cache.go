@@ -4,6 +4,7 @@ import (
 	"context"
 	"crypto/sha1"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/de4et/flight-booking/internal/model/trip"
@@ -47,9 +48,7 @@ func NewRedisSROCache(addr, password string, serializer serializer) (*RedisSROCa
 }
 
 func (c *RedisSROCache) Get(ctx context.Context, token string) (*trip.Trips, error) {
-	tokenHash := sha1.Sum([]byte(token))
-	key := string(tokenHash[:])
-
+	key := generateKey(token)
 	val, err := c.client.Get(ctx, key).Bytes()
 	if err != nil {
 		if errors.Is(err, redis.Nil) {
@@ -62,13 +61,17 @@ func (c *RedisSROCache) Get(ctx context.Context, token string) (*trip.Trips, err
 }
 
 func (c *RedisSROCache) Set(ctx context.Context, token string, ts *trip.Trips) error {
-	tokenHash := sha1.Sum([]byte(token))
-	key := string(tokenHash[:])
-
+	key := generateKey(token)
 	b, err := c.serializer.SerializeTrips(ts)
 	if err != nil {
 		return err
 	}
 
-	return c.client.Set(ctx, key, b, 0).Err()
+	return c.client.Set(ctx, key, b, ttl).Err()
+}
+
+func generateKey(token string) string {
+	tokenHash := sha1.Sum([]byte(token))
+	key := string(tokenHash[:])
+	return fmt.Sprintf("cached_sro_%s", key)
 }
