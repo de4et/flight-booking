@@ -40,4 +40,6 @@ func (handler *SearchResultHandler) Handle(c *gin.Context) {
 
 	ctx = logger.WithContext(ctx, "trips", ts)
 	slog.InfoContext(ctx, "Successfully recieved trips")
+
+	c.JSON(http.StatusOK, ts.ToArray())
 }
