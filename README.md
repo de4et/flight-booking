@@ -1,5 +1,7 @@
 # Project flight-booking
 
+<img width="718" height="116" alt="imgonline-com-ua-Frame-blurred-0yj7hWQhz6k" src="https://github.com/user-attachments/assets/df7e3906-7795-429c-ba17-a660cef1c4ae" />
+
 ## Setup 
 
 If you running this for the first time run: `make setup`.
