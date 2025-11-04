@@ -25,6 +25,15 @@ docker-run:
 		docker-compose up --build; \
 	fi
 
+docker-live-rebuild:
+	@if docker compose version >/dev/null 2>&1; then \
+		echo "Using Docker Compose v2"; \
+		docker compose up --build -d --no-deps app; \
+	else \
+		echo "Using Docker Compose v1"; \
+		docker-compose up --build -d --no-deps app; \
+	fi
+
 # Shutdown DB container
 docker-down:
 	@if docker compose down 2>/dev/null; then \
