@@ -8,6 +8,7 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/de4et/flight-booking/internal/adapters/gzip"
 	"github.com/de4et/flight-booking/internal/adapters/protobuf"
 	"github.com/de4et/flight-booking/internal/adapters/redis"
 	"github.com/de4et/flight-booking/internal/database"
@@ -34,7 +35,11 @@ func NewServer() *http.Server {
 	redisAddr := fmt.Sprintf("%s:%s", os.Getenv("REDIS_HOST"), os.Getenv("REDIS_PORT"))
 
 	slog.Debug("Connecting to redis", "addr", redisAddr)
-	c, err := redis.NewRedisSROCache(redisAddr, os.Getenv("REDIS_PASSWORD"), protobuf.NewTripsSerializer())
+	gzLevel, _ := strconv.Atoi(os.Getenv("GZIP_LEVEL"))
+	c, err := redis.NewRedisSROCache(redisAddr, os.Getenv("REDIS_PASSWORD"),
+		protobuf.NewTripsSerializer(),
+		gzip.NewGzipCompressor(gzLevel),
+	)
 	if err != nil {
 		panic("couldn't start redis")
 	}

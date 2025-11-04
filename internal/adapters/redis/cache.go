@@ -23,12 +23,18 @@ type serializer interface {
 	DeserializeTrips(data []byte) (*trip.Trips, error)
 }
 
+type compressor interface {
+	Compress(data []byte) ([]byte, error)
+	Decompress(compressed []byte) ([]byte, error)
+}
+
 type RedisSROCache struct {
 	client     *redis.Client
 	serializer serializer
+	compressor compressor
 }
 
-func NewRedisSROCache(addr, password string, serializer serializer) (*RedisSROCache, error) {
+func NewRedisSROCache(addr, password string, serializer serializer, compressor compressor) (*RedisSROCache, error) {
 	rdb := redis.NewClient(&redis.Options{
 		Addr:     addr,
 		Password: password,
@@ -44,6 +50,7 @@ func NewRedisSROCache(addr, password string, serializer serializer) (*RedisSROCa
 	return &RedisSROCache{
 		client:     rdb,
 		serializer: serializer,
+		compressor: compressor,
 	}, nil
 }
 
@@ -57,6 +64,13 @@ func (c *RedisSROCache) Get(ctx context.Context, token string) (*trip.Trips, err
 		return nil, err
 	}
 
+	if c.compressor != nil {
+		val, err = c.compressor.Decompress(val)
+		if err != nil {
+			return nil, err
+		}
+	}
+
 	return c.serializer.DeserializeTrips(val)
 }
 
@@ -65,6 +79,13 @@ func (c *RedisSROCache) Set(ctx context.Context, token string, ts *trip.Trips) e
 	b, err := c.serializer.SerializeTrips(ts)
 	if err != nil {
 		return err
+	}
+
+	if c.compressor != nil {
+		b, err = c.compressor.Compress(b)
+		if err != nil {
+			return err
+		}
 	}
 
 	return c.client.Set(ctx, key, b, ttl).Err()
