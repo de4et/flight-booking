@@ -6,6 +6,9 @@ pipeline {
             agent {
                 node { label 'docker-agent-golang' }
             }
+            tools {
+                go '1.25.5'
+            }
             steps {
                 sh 'go build -o main cmd/api/main.go'
             }
@@ -14,6 +17,9 @@ pipeline {
         stage('Test') {
             agent {
                 node { label 'docker-agent-golang' }
+            }
+            tools {
+                go '1.25.5'
             }
             steps {
                 sh 'go test ./... -v'
