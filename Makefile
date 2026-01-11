@@ -4,9 +4,6 @@
 all: build test
 
 build:
-	@echo "Building..."
-	
-	
 	@go build -o main cmd/api/main.go
 
 setup:
@@ -45,7 +42,6 @@ docker-down:
 
 # Test the application
 test:
-	@echo "Testing..."
 	@go test ./... -v
 # Integrations Tests for the application
 itest:

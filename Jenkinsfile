@@ -12,18 +12,25 @@ pipeline {
             steps {
                 echo "Building..."
                 sh '''
-                    echo "doing build stuff"; sleep 5;
+                    make build
                 '''
             }
         }
         stage('Test') {
             steps {
                 echo "Testing..."
+                sh '''
+                    make test
+                '''
             }
         }
         stage("Delivery") {
             steps {
                 echo "Delivery"
+                sh '''
+                    make docker-run
+                '''
+
             }
         }
     }
