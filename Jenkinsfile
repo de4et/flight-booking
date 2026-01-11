@@ -25,7 +25,9 @@ pipeline {
         }
 
         stage('Deploy') {
-            agent master
+            agent {node {
+                label 'master'
+            }}
             steps {
                 script {
                     sh '''
