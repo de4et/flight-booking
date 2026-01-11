@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Build') {
             agent {
-                node { image 'docker-image-golang' }
+                node { label 'docker-image-golang' }
             }
             steps {
                 sh 'go build -o main cmd/api/main.go'
