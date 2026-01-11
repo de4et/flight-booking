@@ -18,3 +18,5 @@ Every next time: `make docker-run` (and propably wait for about 15-30s)
 
 Run http://localhost:8080/api/v1/search-result?token=AKV40000OWE1000001110MOWLED20241015
 and see logs in Kibana
+
+~for test~
