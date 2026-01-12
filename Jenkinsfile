@@ -31,8 +31,8 @@ pipeline {
                 label 'master'
             }}
             environment {
-                DOCKER_HOST = 'tcp://docker:2375'
-                DOCKER_TLS_VERIFY = '0'
+                DOCKER_HOST = 'tcp://localhost:2375'
+                // DOCKER_TLS_VERIFY = '0'
             }
             steps {
                 script {
@@ -61,10 +61,36 @@ pipeline {
                     //     docker rm my-app || true
                     // '''
 
+                    // sh '''
+                    //     docker compose build app
+                    //     docker compose up -d --no-deps app
+                    // '''
                     sh '''
-                        docker compose build app
-                        docker compose up -d --no-deps app
+                        echo "=== Docker Debug ==="
+                        echo "DOCKER_HOST: $DOCKER_HOST"
+                        echo "Checking docker socket..."
+                        ls -la /var/run/docker.sock 2>/dev/null || echo "No socket"
+
+                        # Try different approaches
+                        echo "Trying direct docker command..."
+                        /usr/bin/docker ps 2>&1 | head -5
                     '''
+
+                    // Try multiple approaches
+                    sh '''
+                        # Approach 1: Clear DOCKER_HOST
+                        unset DOCKER_HOST
+
+                        # Approach 2: If Approach 1 fails, use full path
+                        if ! docker compose build app; then
+                            echo "Trying with full path..."
+                            /usr/bin/docker compose build app
+                            /usr/bin/docker compose up -d --no-deps app
+                        else
+                            docker compose up -d --no-deps app
+                        fi
+                    '''
+
 
                     // Run new container
                     // sh '''
