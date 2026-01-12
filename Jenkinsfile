@@ -65,53 +65,6 @@ pipeline {
                     //     docker compose build app
                     //     docker compose up -d --no-deps app
                     // '''
-                    sh '''
-                        echo "=== Setting up environment ==="
-
-                        # 1. Clear Docker environment variables
-                        unset DOCKER_HOST
-                        unset DOCKER_TLS_VERIFY
-
-                        # 2. Check if Docker is available
-                        echo "Testing Docker..."
-                        if command -v docker >/dev/null 2>&1; then
-                            echo "Docker found at: $(which docker)"
-                        else
-                            echo "ERROR: Docker not found!"
-                            exit 1
-                        fi
-
-                        # 3. Try to use Docker
-                        if docker ps >/dev/null 2>&1; then
-                            echo "Docker is accessible!"
-                        else
-                            echo "ERROR: Cannot connect to Docker daemon"
-                            echo "Trying different methods..."
-
-                            # Try Unix socket (might be different location)
-                            export DOCKER_HOST=unix:///var/run/docker.sock
-                            docker ps 2>&1 | head -5 || echo "Unix socket failed"
-
-                            # Try Docker Desktop socket
-                            export DOCKER_HOST=unix:///var/run/docker-desktop/docker.sock
-                            docker ps 2>&1 | head -5 || echo "Docker Desktop socket failed"
-
-                            # Try socat if you have it
-                            export DOCKER_HOST=tcp://localhost:2375
-                            docker ps 2>&1 | head -5 || echo "TCP socket failed"
-
-                            exit 1
-                        fi
-
-                        # 4. Now build and deploy
-                        echo "Building and deploying..."
-                        # Build and run
-                        docker compose build app
-                        docker compose up -d --no-deps app
-
-                        echo "✅ Deployment complete!"
-
-                    '''
 sh '''
             # Test HTTP connection to socat
             echo "Testing socat connection..."
