@@ -123,7 +123,6 @@ sh '''
             # Test Docker with HTTP explicitly
             DOCKER_HOST=tcp://docker:2375 DOCKER_TLS_VERIFY=0 docker ps
         '''
-    }
 
                     // Run new container
                     // sh '''
