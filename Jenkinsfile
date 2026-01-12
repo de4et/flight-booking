@@ -110,7 +110,20 @@ pipeline {
                         docker compose up -d --no-deps app
 
                         echo "✅ Deployment complete!"
+
                     '''
+sh '''
+            # Test HTTP connection to socat
+            echo "Testing socat connection..."
+            curl -s http://docker:2375/version | jq -r '.Version'
+
+            # Test Docker with HTTP
+            DOCKER_HOST=tcp://docker:2375 docker ps
+
+            # Test Docker with HTTP explicitly
+            DOCKER_HOST=tcp://docker:2375 DOCKER_TLS_VERIFY=0 docker ps
+        '''
+    }
 
                     // Run new container
                     // sh '''
