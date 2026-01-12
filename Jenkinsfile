@@ -32,7 +32,7 @@ pipeline {
             }}
             environment {
                 DOCKER_HOST = 'tcp://localhost:2375'
-                DOCKER_TLS_VERIFY = '0'  # Disable TLS verification
+                DOCKER_TLS_VERIFY = '0'
             }
             steps {
                 script {
