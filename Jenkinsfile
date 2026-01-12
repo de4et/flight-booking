@@ -33,7 +33,7 @@ pipeline {
             steps {
                 script {
                     sh '''
-                        cat > .env.production << 'EOF'
+                        cat > .env << 'EOF'
                         PORT=8080
                         APP_ENV=production
                         BLUEPRINT_DB_HOST=psql_bp
