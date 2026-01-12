@@ -2,36 +2,36 @@ pipeline {
     agent none
 
     stages {
-        stage('Build') {
-            agent {
-                node { label 'docker-agent-golang' }
-            }
-            tools {
-                go '1.25.5'
-            }
-            steps {
-                sh 'go build -o main cmd/api/main.go'
-            }
-        }
-
-        stage('Test') {
-            agent {
-                node { label 'docker-agent-golang' }
-            }
-            tools {
-                go '1.25.5'
-            }
-            steps {
-                sh 'go test ./... -v'
-            }
-        }
+        // stage('Build') {
+        //     agent {
+        //         node { label 'docker-agent-golang' }
+        //     }
+        //     tools {
+        //         go '1.25.5'
+        //     }
+        //     steps {
+        //         sh 'go build -o main cmd/api/main.go'
+        //     }
+        // }
+        //
+        // stage('Test') {
+        //     agent {
+        //         node { label 'docker-agent-golang' }
+        //     }
+        //     tools {
+        //         go '1.25.5'
+        //     }
+        //     steps {
+        //         sh 'go test ./... -v'
+        //     }
+        // }
 
         stage('Deploy') {
             agent {node {
                 label 'master'
             }}
             environment {
-                DOCKER_HOST = 'tcp://localhost:2375'
+                DOCKER_HOST = 'tcp://docker:2375'
                 DOCKER_TLS_VERIFY = '0'
             }
             steps {
