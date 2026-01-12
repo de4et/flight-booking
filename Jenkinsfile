@@ -70,11 +70,11 @@ sh '''
             echo "Testing socat connection..."
             curl -s http://docker:2375/version
 
-            DOCKER_HOST=http://docker:2375 DOCKER_TLS_VERIFY=0 docker ps
-            # Test Docker with HTTP
-            DOCKER_HOST=http://docker:2375 docker ps
-
             # Test Docker with HTTP explicitly
+            DOCKER_HOST=tcp://docker:2375 DOCKER_TLS_VERIFY=0 docker ps
+            # Test Docker with HTTP
+            DOCKER_HOST=tcp://docker:2375 docker ps
+
         '''
 
                     // Run new container
