@@ -53,40 +53,28 @@ pipeline {
                         EOF
                     '''
 
-                    // Stop and remove old container
-                    // sh '''
-                    //     export DOCKER_HOST=unix:///var/run/docker.sock
-                    //     docker build -t my-app:latest .
-                    //     docker stop my-app || true
-                    //     docker rm my-app || true
-                    // '''
+                    sh '''
+                        unset DOCKER_TLS_VERIFY
+                        export DOCKER_HOST=tcp://docker:2375
+                        docker build -t my-app:latest .
+                        docker stop my-app || true
+                        docker rm my-app || true
+                    '''
 
                     // sh '''
                     //     docker compose build app
                     //     docker compose up -d --no-deps app
                     // '''
-sh '''
-            # Test HTTP connection to socat
-            echo "Testing socat connection..."
-            curl -s http://docker:2375/version
 
-            # Test Docker with HTTP explicitly
-            unset DOCKER_TLS_VERIFY
-            DOCKER_HOST=tcp://docker:2375 docker ps
-            # Test Docker with HTTP
-            DOCKER_HOST=tcp://docker:2375 docker ps
-
-        '''
-
-                    // Run new container
-                    // sh '''
-                    //         docker run -d \
-                    //         --name my-app \
-                    //         --network blueprint \
-                    //         --env-file .env.production \
-                    //         -p 8080:8080 \
-                    //         my-app:latest
-                    // '''
+                    Run new container
+                    sh '''
+                            docker run -d \
+                            --name my-app \
+                            --network blueprint \
+                            --env-file .env \
+                            -p 8080:8080 \
+                            my-app:latest
+                    '''
                 }
             }
         }
