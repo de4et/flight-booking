@@ -49,11 +49,10 @@ pipeline {
                         EOF
                     '''
 
-                    // Build Docker image using host's Docker
-                    sh 'docker build -t my-app:latest .'
-
                     // Stop and remove old container
                     sh '''
+                        export DOCKER_HOST=unix:///var/run/docker.sock
+                        docker build -t my-app:latest .
                         docker stop my-app || true
                         docker rm my-app || true
                     '''
