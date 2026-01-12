@@ -30,10 +30,10 @@ pipeline {
             agent {node {
                 label 'master'
             }}
-            environment {
-                DOCKER_HOST = 'tcp://localhost:2375'
-                // DOCKER_TLS_VERIFY = '0'
-            }
+            // environment {
+            //     DOCKER_HOST = 'tcp://localhost:2375'
+            //     // DOCKER_TLS_VERIFY = '0'
+            // }
             steps {
                 script {
                     sh '''
