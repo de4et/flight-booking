@@ -66,7 +66,6 @@ pipeline {
                     //     docker compose up -d --no-deps app
                     // '''
 
-                    Run new container
                     sh '''
                             docker run -d \
                             --name my-app \
