@@ -71,7 +71,8 @@ sh '''
             curl -s http://docker:2375/version
 
             # Test Docker with HTTP explicitly
-            DOCKER_HOST=tcp://docker:2375 DOCKER_TLS_VERIFY=0 docker ps
+            unset DOCKER_TLS_VERIFY
+            DOCKER_HOST=tcp://docker:2375 docker ps
             # Test Docker with HTTP
             DOCKER_HOST=tcp://docker:2375 docker ps
 
