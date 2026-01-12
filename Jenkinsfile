@@ -68,7 +68,7 @@ pipeline {
 sh '''
             # Test HTTP connection to socat
             echo "Testing socat connection..."
-            curl -s http://docker:2375/version | jq -r '.Version'
+            curl -s http://docker:2375/version
 
             # Test Docker with HTTP
             DOCKER_HOST=tcp://docker:2375 docker ps
