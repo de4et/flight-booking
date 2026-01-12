@@ -59,20 +59,13 @@ pipeline {
                         docker build -t my-app:latest .
                         docker stop my-app || true
                         docker rm my-app || true
-                    '''
 
-                    // sh '''
-                    //     docker compose build app
-                    //     docker compose up -d --no-deps app
-                    // '''
-
-                    sh '''
-                            docker run -d \
-                            --name my-app \
-                            --network blueprint \
-                            --env-file .env \
-                            -p 8080:8080 \
-                            my-app:latest
+                        docker run -d \
+                        --name my-app \
+                        --network blueprint \
+                        --env-file .env \
+                        -p 8080:8080 \
+                        my-app:latest
                     '''
                 }
             }
