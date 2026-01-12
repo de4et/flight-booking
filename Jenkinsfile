@@ -62,7 +62,7 @@ pipeline {
 
                         docker run -d \
                         --name my-app \
-                        --network blueprint \
+                        --network flight-booking_blueprint \
                         --env-file .env \
                         -p 8080:8080 \
                         my-app:latest
