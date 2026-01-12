@@ -66,31 +66,51 @@ pipeline {
                     //     docker compose up -d --no-deps app
                     // '''
                     sh '''
-                        echo "=== Docker Debug ==="
-                        echo "DOCKER_HOST: $DOCKER_HOST"
-                        echo "Checking docker socket..."
-                        ls -la /var/run/docker.sock 2>/dev/null || echo "No socket"
+                        echo "=== Setting up environment ==="
 
-                        # Try different approaches
-                        echo "Trying direct docker command..."
-                        /usr/bin/docker ps 2>&1 | head -5
-                    '''
-
-                    // Try multiple approaches
-                    sh '''
-                        # Approach 1: Clear DOCKER_HOST
+                        # 1. Clear Docker environment variables
                         unset DOCKER_HOST
+                        unset DOCKER_TLS_VERIFY
 
-                        # Approach 2: If Approach 1 fails, use full path
-                        if ! docker compose build app; then
-                            echo "Trying with full path..."
-                            /usr/bin/docker compose build app
-                            /usr/bin/docker compose up -d --no-deps app
+                        # 2. Check if Docker is available
+                        echo "Testing Docker..."
+                        if command -v docker >/dev/null 2>&1; then
+                            echo "Docker found at: $(which docker)"
                         else
-                            docker compose up -d --no-deps app
+                            echo "ERROR: Docker not found!"
+                            exit 1
                         fi
-                    '''
 
+                        # 3. Try to use Docker
+                        if docker ps >/dev/null 2>&1; then
+                            echo "Docker is accessible!"
+                        else
+                            echo "ERROR: Cannot connect to Docker daemon"
+                            echo "Trying different methods..."
+
+                            # Try Unix socket (might be different location)
+                            export DOCKER_HOST=unix:///var/run/docker.sock
+                            docker ps 2>&1 | head -5 || echo "Unix socket failed"
+
+                            # Try Docker Desktop socket
+                            export DOCKER_HOST=unix:///var/run/docker-desktop/docker.sock
+                            docker ps 2>&1 | head -5 || echo "Docker Desktop socket failed"
+
+                            # Try socat if you have it
+                            export DOCKER_HOST=tcp://localhost:2375
+                            docker ps 2>&1 | head -5 || echo "TCP socket failed"
+
+                            exit 1
+                        fi
+
+                        # 4. Now build and deploy
+                        echo "Building and deploying..."
+                        # Build and run
+                        docker compose build app
+                        docker compose up -d --no-deps app
+
+                        echo "✅ Deployment complete!"
+                    '''
 
                     // Run new container
                     // sh '''
