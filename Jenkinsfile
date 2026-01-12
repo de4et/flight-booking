@@ -64,7 +64,7 @@ pipeline {
                         --name my-app \
                         --network flight-booking_blueprint \
                         --env-file .env \
-                        -p 8080:8080 \
+                        -p 8081:8080 \
                         my-app:latest
                     '''
                 }
