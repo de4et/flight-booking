@@ -24,20 +24,22 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                sshagent(['deploy-key']) {
-                    sh '''
-                        ssh deploy@${HOME_IP} "
-                            cd deploy
-                            docker pull de4et/flight-booking:${GIT_COMMIT}
-                            docker run \
-                                -d \
-                                --network flight-booking_blueprint \
-                                --name app \
-                                --env-file .env \
-                                -p 8081:8080 \
-                                de4et/flight-booking:${GIT_COMMIT}
-                        "
-                    '''
+                withCredentials([string(credentialsId: 'HOME_IP', variable: 'HOME_IP')]) {
+                    sshagent(['deploy-key']) {
+                        sh '''
+                            ssh deploy@${HOME_IP} "
+                                cd deploy
+                                docker pull de4et/flight-booking:${GIT_COMMIT}
+                                docker run \
+                                    -d \
+                                    --network flight-booking_blueprint \
+                                    --name app \
+                                    --env-file .env \
+                                    -p 8081:8080 \
+                                    de4et/flight-booking:${GIT_COMMIT}
+                            "
+                        '''
+                    }
                 }
             }
         }
