@@ -12,12 +12,9 @@ pipeline {
         }
 
         stage('Build') {
-            tools {
-                go '1.25.5'
-            }
-            steps {
-                sh 'docker build -t de4et/flight-booking:${GIT_COMMIT} .'
-                sh 'docker push de4et/flight-booking:${GIT_COMMIT}'
+            docker.withRegistry('registry.hub.docker.com', 'docker-hub') {
+                def image = docker.build("de4et/flight-booking:${GIT_COMMIT}")
+                image.push()
             }
         }
 
