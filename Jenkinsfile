@@ -30,6 +30,7 @@ pipeline {
                             ssh -o StrictHostKeyChecking=no deploy@$HOME_IP "
                                 cd deploy
                                 docker pull de4et/flight-booking:${GIT_COMMIT}
+                                docker stop app
                                 docker run \
                                     -d \
                                     --rm \
