@@ -32,6 +32,7 @@ pipeline {
                                 docker pull de4et/flight-booking:${GIT_COMMIT}
                                 docker run \
                                     -d \
+                                    --rm \
                                     --network flight-booking_blueprint \
                                     --name app \
                                     --env-file .env \
