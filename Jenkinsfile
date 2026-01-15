@@ -39,6 +39,7 @@ pipeline {
                                     --env-file .env \
                                     -p 8081:8080 \
                                     de4et/flight-booking:${GIT_COMMIT}
+                                if [ \"$?\" = \"1\" ]; then echo \"Started successfully\"; else echo \"Error occured $?\"; fi
                             "
                         """
                     }
