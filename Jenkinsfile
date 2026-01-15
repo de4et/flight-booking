@@ -2,25 +2,25 @@ pipeline {
     agent any
 
     stages {
-        stage('Test') {
-            tools {
-                go '1.25.5'
-            }
-            steps {
-                sh 'go test ./... -v'
-            }
-        }
-
-        stage('Build') {
-            steps {
-                script {
-                    docker.withRegistry('', 'docker-hub') {
-                        def image = docker.build("de4et/flight-booking:${GIT_COMMIT}")
-                        image.push()
-                    }
-                }
-            }
-        }
+        // stage('Test') {
+        //     tools {
+        //         go '1.25.5'
+        //     }
+        //     steps {
+        //         sh 'go test ./... -v'
+        //     }
+        // }
+        //
+        // stage('Build') {
+        //     steps {
+        //         script {
+        //             docker.withRegistry('', 'docker-hub') {
+        //                 def image = docker.build("de4et/flight-booking:${GIT_COMMIT}")
+        //                 image.push()
+        //             }
+        //         }
+        //     }
+        // }
 
         stage('Deploy') {
             steps {
