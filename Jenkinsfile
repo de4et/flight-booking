@@ -2,72 +2,41 @@ pipeline {
     agent none
 
     stages {
-        // stage('Build') {
-        //     agent {
-        //         node { label 'docker-agent-golang' }
-        //     }
-        //     tools {
-        //         go '1.25.5'
-        //     }
-        //     steps {
-        //         sh 'go build -o main cmd/api/main.go'
-        //     }
-        // }
-        //
-        // stage('Test') {
-        //     agent {
-        //         node { label 'docker-agent-golang' }
-        //     }
-        //     tools {
-        //         go '1.25.5'
-        //     }
-        //     steps {
-        //         sh 'go test ./... -v'
-        //     }
-        // }
+        stage('Test') {
+            tools {
+                go '1.25.5'
+            }
+            steps {
+                sh 'go test ./... -v'
+            }
+        }
+
+        stage('Build') {
+            tools {
+                go '1.25.5'
+            }
+            steps {
+                sh 'docker build -t de4et/flight-booking:${GIT_COMMIT} .'
+                sh 'docker push de4et/flight-booking:${GIT_COMMIT}'
+            }
+        }
 
         stage('Deploy') {
-            agent {node {
-                label 'master'
-            }}
-            // environment {
-            //     DOCKER_HOST = 'tcp://localhost:2375'
-            //     // DOCKER_TLS_VERIFY = '0'
-            // }
             steps {
-                script {
+                sshagent(['deploy-key']) {
                     sh '''
-                        cat > .env << 'EOF'
-                        PORT=8080
-                        APP_ENV=production
-                        BLUEPRINT_DB_HOST=psql_bp
-                        BLUEPRINT_DB_PORT=5432
-                        BLUEPRINT_DB_DATABASE=blueprint
-                        BLUEPRINT_DB_USERNAME=melkey
-                        BLUEPRINT_DB_PASSWORD=password1234
-                        BLUEPRINT_DB_SCHEMA=public
-                        REDIS_HOST=redis
-                        REDIS_PORT=6379
-                        REDIS_PASSWORD=hkjchzcxvysdafas2345345akljkjkbz
-                        GZIP_LEVEL=6
-                        EOF
+                        ssh deploy@${HOME_IP} "
+                            cd deploy
+                            docker pull de4et/flight-booking:${GIT_COMMIT}
+                            docker run \
+                                -d \
+                                --network flight-booking_blueprint \
+                                --name app \
+                                --env-file .env \
+                                -p 8081:8080 \
+                                de4et/flight-booking:${GIT_COMMIT}
+                        "
                     '''
-
-                    sh '''
-                        unset DOCKER_TLS_VERIFY
-                        export DOCKER_HOST=tcp://docker:2375
-                        docker build -t my-app:latest .
-                        docker stop my-app || true
-                        docker rm my-app || true
-
-                        docker run -d \
-                        --name my-app \
-                        --network flight-booking_blueprint \
-                        --env-file .env \
-                        -p 8081:8080 \
-                        my-app:latest
-                    '''
-                }
             }
         }
     }
