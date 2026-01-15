@@ -27,7 +27,7 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'HOME_IP', variable: 'HOME_IP')]) {
                     sshagent(['deploy-key']) {
-                        sh """
+                        sh '''
                             ssh -o StrictHostKeyChecking=no deploy@$HOME_IP "
                                 cd deploy
                                 docker pull de4et/flight-booking:${GIT_COMMIT}
@@ -40,9 +40,9 @@ pipeline {
                                     --env-file .env \
                                     -p 8081:8080 \
                                     de4et/flight-booking:${GIT_COMMIT}
-                                if [ \"\$?\" = \"1\" ]; then echo \"Started successfully\"; else echo \"Error occured $?\"; fi
+                                if [ "$?" = "1" ]; then echo "Started successfully"; else echo "Error occured $?"; fi
                             "
-                        """
+                        '''
                     }
                 }
             }
