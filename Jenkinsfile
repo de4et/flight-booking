@@ -37,6 +37,7 @@ pipeline {
                                 de4et/flight-booking:${GIT_COMMIT}
                         "
                     '''
+                }
             }
         }
     }
