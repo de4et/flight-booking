@@ -27,7 +27,7 @@ pipeline {
                 withCredentials([string(credentialsId: 'HOME_IP', variable: 'HOME_IP')]) {
                     sshagent(['deploy-key']) {
                         sh """
-                            ssh deploy@${HOME_IP} "
+                            ssh -o StrictHostKeyChecking=no deploy@$HOME_IP "
                                 cd deploy
                                 docker pull de4et/flight-booking:${GIT_COMMIT}
                                 docker run \
